@@ -1,10 +1,10 @@
 import React from 'react'
 
-function Article( props  ) {
+function Article({ source, author, title, description, url, urlToImage, publishedAt, content}  ) {
     return (
         <div>
             <div className="article">
-                {props.url}
+                {source.name}{author}{title}{description}{url}{urlToImage}{publishedAt}{content}
             </div>
         </div>
     )

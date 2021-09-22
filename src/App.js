@@ -5,7 +5,16 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      news: ['']
+      news: [{
+        source: { id: '', name: '' },
+        author: '',
+        title: '',
+        description: '',
+        url: '',
+        urlToImage: '',
+        publishedAt: '',
+        content: ''
+      }]
     };
   }
 
@@ -28,7 +37,17 @@ class App extends Component {
     return (
       <div>
         {this.state.news.map((art, key) => (
-          <Article url = {this.state.news[key].url} />
+          <Article
+            source={this.state.news[key].source}
+            author={this.state.news[key].author}
+            title={this.state.news[key].title}
+            description={this.state.news[key].description}
+            url={this.state.news[key].url}
+            urlToImage={this.state.news[key].urlToImage}
+            publishedAt={this.state.news[key].publishedAt}
+            content={this.state.news[key].content}
+            key={key}
+          />
         ))}
       </div>
     );
