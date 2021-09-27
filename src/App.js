@@ -27,14 +27,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      news: []
+      sources: sources
     };
   }
 
-  componentDidMount() {
+  async articleFetch() {
     Promise.all([
-      fetch(`https://newsapi.org/v2/everything?domains=${sources[0].url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`),
-      fetch(`https://newsapi.org/v2/everything?domains=${sources[1].url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`)
+      fetch(`https://newsapi.org/v2/everything?domains=${this.state.sources[0].url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`),
+      fetch(`https://newsapi.org/v2/everything?domains=${this.state.sources[1].url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`)
     ])
     .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
       .then((dataArray) => {
@@ -67,6 +67,10 @@ class App extends Component {
       , document.getElementById('articlesDiv'))
     }
     )
+  }
+
+  componentDidMount() {
+    this.articleFetch();
   }
   
   render() {
