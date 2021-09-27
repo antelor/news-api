@@ -1,54 +1,83 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import Article from './components/Article';
+import './App.css';
+import sources from './components/sources';
+
+/*this.state.news structure:
+array of sources,
+sources -> object with sourcename and array of articles
+articles -> object with author title, etc
+[{
+  sourceName: '',
+  articles: [
+    {
+      author: '',
+      title: '',
+      description: '',
+      url: '',
+      urlToImage: '',
+      publishedAt: '',
+      content: ''
+    },
+  ]
+}],*/
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      news: [{
-        source: { id: '', name: '' },
-        author: '',
-        title: '',
-        description: '',
-        url: '',
-        urlToImage: '',
-        publishedAt: '',
-        content: ''
-      }]
+      news: []
     };
   }
 
   componentDidMount() {
-    fetch('https://newsapi.org/v2/everything?q=tesla&from=2021-08-22&sortBy=publishedAt&apiKey=5d093ac6111d45a48bf08b3381a0727b')
-    .then(res => res.json())
-      .then((data) => {
-        let dataArr = [];
+    Promise.all([
+      fetch(`https://newsapi.org/v2/everything?domains=${sources[0]}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`),
+      fetch(`https://newsapi.org/v2/everything?domains=${sources[1]}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`)
+    ])
+    .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+      .then((dataArray) => {
+      console.log(dataArray[0].articles[0]);
+      ReactDOM.render(
+      <div>
+      {dataArray.map((sourceItem, key) => (
         
-        Object.keys(data.articles).forEach(key => {
-          dataArr.push(data.articles[key])
-        })
+        <div className="source-container" key={key}>
+          <h2>{sources[key]}</h2>
+          
+          { console.log(sourceItem.articles)}
+          {typeof sourceItem.articles.length!=0 ? sourceItem.articles.map((article, keyA) => (
+            <div key={keyA}>
+                <Article
+                  author={article.author}
+                  title={article.title}
+                  description={article.description}
+                  url={article.url}
+                  urlToImage={article.urlToImage}
+                  publishedAt={article.publishedAt}
+                  content={article.content}
+                  key = { keyA }
+                />            
+            </div>
+          )) : <div>No articles</div>}
+          
+        </div>
 
-        this.setState({ news: dataArr });
-    })
-    .catch(console.log)
+      ))}
+      </div>
+      , document.getElementById('test'))
+    }
+    )
   }
   
   render() {
     return (
-      <div>
-        {this.state.news.map((art, key) => (
-          <Article
-            source={this.state.news[key].source}
-            author={this.state.news[key].author}
-            title={this.state.news[key].title}
-            description={this.state.news[key].description}
-            url={this.state.news[key].url}
-            urlToImage={this.state.news[key].urlToImage}
-            publishedAt={this.state.news[key].publishedAt}
-            content={this.state.news[key].content}
-            key={key}
-          />
-        ))}
+      <div className="app">
+        <h1>News</h1>
+
+        <div id="test"></div>
+
       </div>
     );
   }

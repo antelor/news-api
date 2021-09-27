@@ -1,0 +1,21 @@
+.article{
+    margin:1em;
+    width:220px;
+    text-align: center;
+}
+
+.art-img{
+    width:200px;
+    height: 120px;
+    padding:1em;
+}
+
+.art-title{
+    font-weight: bold;
+    font-size: medium;
+}
+
+.art-content{
+    text-align: justify;
+    margin: 1em 1em 0 1em;
+}
