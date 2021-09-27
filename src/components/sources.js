@@ -1,6 +1,12 @@
 let sources = [
-    'wsj.com',
-    'washingtonpost.com'
+    {
+        name: 'Wall Street Journal',
+        url: 'wsj.com'
+    },
+    {
+        name: 'Washington Post',
+        url: 'washingtonpost.com'
+    }
 ];
 
 export default sources
