@@ -27,25 +27,44 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sources: sources
     };
   }
 
-  async articleFetch() {
-    Promise.all([
-      fetch(`https://newsapi.org/v2/everything?domains=${this.state.sources[0].url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`),
-      fetch(`https://newsapi.org/v2/everything?domains=${this.state.sources[1].url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`)
-    ])
-    .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
-      .then((dataArray) => {
+  async articleFetch( allSources ) {
+    let fetchArray = [];
+    
+    allSources.map((source, key) => {
+      let [beginning, name, ...domain] = source.url.split('.');
+      let url = name + '.' + domain.join('.');
+      fetchArray.push(
+        fetch(`https://newsapi.org/v2/everything?domains=${url}&sortBy=popularity&apiKey=5d093ac6111d45a48bf08b3381a0727b`)
+      )
+    });
+      
+    Promise.all(fetchArray)
+    .then( results => Promise.all(results.map(r => r.json())) )
+    .then((dataArray) => {
+      
+      let articleArray = [];
+      
+      //only articles
+      dataArray.map((item, key) => {
+        if (dataArray[key].articles.length > 0) {
+          articleArray.push(dataArray[key].articles)
+        }
+      });
+      
+      
       ReactDOM.render(
       <div>
-      {dataArray.map((sourceItem, key) => (
+      {articleArray.map((sourceItem, key) => (
         
         <div className="source-container" key={key}>
-          <h2>{sources[key].name}</h2>
-          
-          {sourceItem.articles.length!==0 ? sourceItem.articles.map((article, keyA) => (
+          <h2>{/*sourceItem.articles.source.name*/}</h2>
+          <h2>{console.log(sourceItem.title)}</h2>
+
+          {/*console.log(sourceItem.articles)*/}
+          {/*sourceItem.length!==0 ? sourceItem.map((article, keyA) => (
             <div key={keyA}>
                 <Article
                   author={article.author}
@@ -58,7 +77,7 @@ class App extends Component {
                   key = { keyA }
                 />            
             </div>
-          )) : <div>No articles</div>}
+          )) : <div>No articles</div>*/}
           
         </div>
 
@@ -69,8 +88,14 @@ class App extends Component {
     )
   }
 
-  componentDidMount() {
-    this.articleFetch();
+  async setSources() {
+    return fetch('https://newsapi.org/v2/top-headlines/sources?country=ar&apiKey=5d093ac6111d45a48bf08b3381a0727b')
+      .then(data => data.json())
+  }
+
+  async componentDidMount() {
+    let allSources = await this.setSources();
+    this.articleFetch(allSources.sources);
   }
   
   render() {
