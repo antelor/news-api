@@ -27,6 +27,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      country: 'ar'
     };
   }
 
@@ -60,9 +61,11 @@ class App extends Component {
       {articleArray.map((sourceItem, key) => (
         
         <div className="source-container" key={key}>
-          <h2>{sourceItem[key].source.name}</h2>
+          <h2 className="source-name">{/*news source name*/ sourceItem[key].source.name}</h2>
 
-          {sourceItem.length!==0 ? sourceItem.map((article, keyA) => (
+          <div className="article-container">
+          {sourceItem.length !== 0 ? sourceItem.map((article, keyA) => (
+            //article data
             <div key={keyA}>
               <h2>{console.log(article)}</h2>
                 <Article
@@ -73,10 +76,13 @@ class App extends Component {
                   urlToImage={article.urlToImage}
                   publishedAt={article.publishedAt}
                   content={article.content}
-                  key = { keyA }
+                  key={keyA}
+                  className="article"
                 />            
             </div>
           )) : <div>No articles</div>}
+
+          </div>
           
         </div>
 
@@ -88,7 +94,7 @@ class App extends Component {
   }
 
   async setSources() {
-    return fetch('https://newsapi.org/v2/top-headlines/sources?country=ar&apiKey=5d093ac6111d45a48bf08b3381a0727b')
+    return fetch(`https://newsapi.org/v2/top-headlines/sources?country=${this.state.country}&apiKey=5d093ac6111d45a48bf08b3381a0727b`)
       .then(data => data.json())
   }
 
@@ -100,6 +106,11 @@ class App extends Component {
   render() {
     return (
       <div className="app">
+        <button>AR</button>
+        <button>BR</button>
+        <button>CH</button>
+        <button>US</button>
+
         <h1>News</h1>
 
         <div id="articlesDiv"></div>

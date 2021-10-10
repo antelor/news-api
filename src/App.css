@@ -1,4 +1,12 @@
 .source-container{
-  display: flex;
+  overflow: scroll;
 }
 
+.source-name{
+  margin-left: 1em;
+  margin-top: 1em;
+}
+
+.article-container{
+  display: flex;
+}
