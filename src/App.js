@@ -60,12 +60,11 @@ class App extends Component {
       {articleArray.map((sourceItem, key) => (
         
         <div className="source-container" key={key}>
-          <h2>{/*sourceItem.articles.source.name*/}</h2>
-          <h2>{console.log(sourceItem.title)}</h2>
+          <h2>{sourceItem[key].source.name}</h2>
 
-          {/*console.log(sourceItem.articles)*/}
-          {/*sourceItem.length!==0 ? sourceItem.map((article, keyA) => (
+          {sourceItem.length!==0 ? sourceItem.map((article, keyA) => (
             <div key={keyA}>
+              <h2>{console.log(article)}</h2>
                 <Article
                   author={article.author}
                   title={article.title}
@@ -77,7 +76,7 @@ class App extends Component {
                   key = { keyA }
                 />            
             </div>
-          )) : <div>No articles</div>*/}
+          )) : <div>No articles</div>}
           
         </div>
 
