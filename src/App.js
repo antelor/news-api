@@ -27,7 +27,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      country: 'ar'
+      country: 'gb'
     };
   }
 
@@ -99,17 +99,26 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    console.log(this.state.country);
+    this.fetchArticle();
+  }
+
+  async fetchArticle() {
     let allSources = await this.setSources();
     this.articleFetch(allSources.sources);
+  }
+
+  changeCountry = (country) => {
+    this.setState({ country: country }, this.fetchArticle);
   }
   
   render() {
     return (
       <div className="app">
-        <button>AR</button>
+        <button onClick={() => this.changeCountry('ar')}>AR</button>
         <button>BR</button>
-        <button>CH</button>
-        <button>US</button>
+        <button>FR</button>
+        <button>GB</button>
 
         <h1>News</h1>
 
